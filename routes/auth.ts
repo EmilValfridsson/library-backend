@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { validate } from "../schemas/User";
+import { validate } from "../schemas/Auth";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -13,30 +13,21 @@ router.post("/", async (req, res) => {
   if (!validation.success)
     return res.status(400).send(validation.error.issues[0].message);
 
-  const existingUser = await prisma.user.findFirst({
+  const user = await prisma.user.findFirst({
     where: { username: req.body.username },
   });
 
-  if (existingUser) res.status(400).send("User already exist");
+  if (!user) return res.status(400).send("Invalid username or password");
 
-  const password = bcrypt.hashSync(req.body.password, 12);
+  const isValid = bcrypt.compareSync(req.body.password, user.password);
 
-  const user = await prisma.user.create({
-    data: {
-      name: req.body.name,
-      username: req.body.username,
-      password,
-    },
-  });
+  if (!isValid) return res.status(400).send("Invalid username or password");
 
-  const { password: p, ...userWithoutPassword } = user;
+  const { password, ...userWithoutPassword } = user;
 
   const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET!);
 
-  return res
-    .header("acces-control-expose-headers", "x-auth-token")
-    .header("x-auth-token", token)
-    .send(userWithoutPassword);
+  return res.send(token);
 });
 
 export default router;
