@@ -103,7 +103,6 @@ router.put("/borrow/:id", async (req, res) => {
   const article = await prisma.article.findUnique({
     where: { id: req.params.id },
   });
-  console.log(req.body);
   if (!article) return res.status(404).send("Article not found");
 
   if (article.type === "Dictionary")
