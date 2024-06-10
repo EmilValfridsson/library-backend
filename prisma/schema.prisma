@@ -24,11 +24,11 @@ model User {
 model Article {
   id             String    @id @default(cuid())
   title          String
-  nbrpages       Int?
+  nbrPages       Int?
   author         String?
   type           String
-  runtimeminutes Int?
-  isborrowable   Boolean
+  runTimeMinutes Int?
+  isBorrowable   Boolean?
   category       Category  @relation(fields: [categoryId], references: [id])
   categoryId     String
   borrower       String?

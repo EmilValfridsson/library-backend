@@ -34,8 +34,8 @@ router.post("/item", async (req, res) => {
       type: req.body.type,
       title: req.body.title,
       categoryId: req.body.categoryId,
-      isborrowable: req.body.isborrowable,
-      runtimeminutes: req.body.runtimeminutes,
+      isBorrowable: req.body.isBorrowable,
+      runTimeMinutes: req.body.runTimeMinutes,
     },
   });
   return res.status(201).send(newItem);
@@ -55,9 +55,9 @@ router.post("/book", async (req, res) => {
       type: req.body.type,
       title: req.body.title,
       categoryId: req.body.categoryId,
-      isborrowable: req.body.isborrowable,
+      isBorrowable: req.body.isBorrowable,
       author: req.body.author,
-      nbrpages: req.body.nbrpages,
+      nbrPages: req.body.nbrPages,
     },
   });
   return res.status(201).send(newBook);
@@ -87,9 +87,9 @@ router.put("/:id", async (req, res) => {
       author: req.body.author,
       categoryId: req.body.categoryId,
       title: req.body.title,
-      isborrowable: req.body.isborrowable,
-      nbrpages: req.body.nbrpages,
-      runtimeminutes: req.body.runtimeminutes,
+      isBorrowable: req.body.isBorrowable,
+      nbrPages: req.body.nbrPages,
+      runTimeMinutes: req.body.runTimeMinutes,
       type: req.body.type,
       borrower: req.body.borrower,
       borrowDate: req.body.borrowDate,
@@ -114,7 +114,7 @@ router.put("/borrow/:id", async (req, res) => {
       data: {
         borrower: req.body.borrower,
         borrowDate: new Date(),
-        isborrowable: false,
+        isBorrowable: false,
       },
     });
     return res.status(201).send(articleOnLoan);
@@ -122,7 +122,7 @@ router.put("/borrow/:id", async (req, res) => {
 
   const returnedArticle = await prisma.article.update({
     where: { id: req.params.id },
-    data: { borrower: null, borrowDate: null, isborrowable: true },
+    data: { borrower: null, borrowDate: null, isBorrowable: true },
   });
 
   return res.status(201).send(returnedArticle);
