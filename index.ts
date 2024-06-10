@@ -13,4 +13,6 @@ app.use("/api/categories", categories);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
 
-app.listen(5588, () => console.log("listening to port 5588..."));
+const PORT = process.env.PORT || 5588;
+
+app.listen(PORT, () => console.log(`listening to port ${PORT}...`));
